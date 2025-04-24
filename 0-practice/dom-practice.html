@@ -20,6 +20,7 @@
         Click Me
     </button>
 
+
     <script type="text/javascript">
 
         // select elements from the DOM by specifying their unique identifiers:
@@ -27,7 +28,7 @@
         var myParagraph = document.getElementById("my-message")
 
         // manipulate properties of an element:
-        myParagraph.innerHTML = "Fun times!"
+        myParagraph.innerText = "Fun times!"
         myParagraph.style.color = "red"
 
         // can even create new elements:
@@ -49,6 +50,9 @@
             clickCount = clickCount + 1
             console.log("YOU CLICKED ME", clickCount, "TIMES! :-)")
         }
+
+        // invoke the function (remember parens):
+        myBtnClick()
 
         // register the handler function to the button's click event
         myBtn.addEventListener("click", myBtnClick, false)
