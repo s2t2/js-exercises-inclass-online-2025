@@ -87,6 +87,7 @@
             <option value="AAPL">Apple (AAPL)</option>
             <option value="NFLX">Netflix (NFLX)</option>
             <option value="SPOT">Spotify (SPOT)</option>
+            <option value="PLTR">Palantir (PLTR)</option>
         </select>
     </div>
 
@@ -133,8 +134,8 @@
 
 
         // SELECTORS
-        // TODO
 
+        var stockSelector = document.getElementById("stock-selector")
 
 
         // FUNCTION DEFINITION
@@ -142,7 +143,7 @@
             console.log("--------------------")
 
             // capturing form inputs:
-            var symbol = "NFLX" // TODO: get from drop-down instead
+            var symbol = stockSelector.value //"NFLX" // TODO: get from drop-down instead
             console.log("SYMBOL:", symbol)
 
             var requestUrl = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&datatype=csv&symbol=" + symbol + "&apikey=" + apiKey
@@ -153,12 +154,49 @@
                 console.log("---------------------")
                 console.log("PART 1...")
 
+                console.log("NUM DAYS:", data.length)
 
+                var latest = data[0]
+                //console.log(latest)
+                console.log("LATEST:", latest["timestamp"], latest["adjusted_close"])
+
+                var earliest = data[data.length - 1]
+                console.log("EARLIEST:", earliest["timestamp"], earliest["adjusted_close"])
+
+                // percent change = (final - initial) / initial
+                var latestClose = parseFloat(latest["adjusted_close"])
+                var earliestClose = parseFloat(earliest["adjusted_close"])
+                var pctChange = (latestClose - earliestClose) / earliestClose
+                console.log("RETURN / PCT CHANGE:", pctChange)
 
 
 
                 console.log("---------------------")
                 console.log("PART 2...")
+
+
+                //var dates = ["2025-01-01", "2025-01-02", "2025-01-03"]
+                //var prices = [100, 125, 175]
+
+                var dates = []
+                var prices = []
+                data.forEach(function(row) {
+                    dates.push(row["timestamp"])
+                    prices.push(parseFloat(row["adjusted_close"]))
+                })
+
+                // DATAVIZ
+                // https://plotly.com/javascript/line-charts/
+                var chartData = [
+                    {x: dates, y: prices, mode: "lines+markers"}
+                ]
+                var chartLayout = {
+                    title: {text: `Stock Prices (${symbol})`},
+                    xaxis: {title: {text: "Date"}},
+                    yaxis: {title: {text: "Adjusted Closing Price ($)"}},
+                }
+                Plotly.newPlot("dataviz-container", chartData, chartLayout, {responsive: true})
+
 
 
 
@@ -171,10 +209,10 @@
         }
 
         // trigger an initial chart update when the page loads:
-        //TODO
+        updateDashboard()
 
         // trigger a subsequent chart update whenever the dropdown option is selected:
-        //TODO
+        stockSelector.addEventListener("change", updateDashboard, false)
 
     </script>
 </body>

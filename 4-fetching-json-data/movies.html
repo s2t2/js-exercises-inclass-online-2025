@@ -77,16 +77,34 @@
     <script type="text/javascript">
 
         var requestUrl = "https://raw.githubusercontent.com/prof-rossetti/internet-technologies/refs/heads/main/data/hp-movies.json"
+        //var dataSomeday
 
         fetch(requestUrl).then(response => response.json())
             .then(function(data){
                 console.log("DATA", data)
-
+                //dataSomeday = data
 
                 console.log("---------------------")
                 console.log("PART 1...")
 
+                console.log(data.length)
 
+                data.forEach(function(movie) {
+                    //console.log("---")
+                    //console.log(movie)
+                    console.log(movie.Title, movie.Year)
+                })
+
+                // sort the movies by rating in descending order
+                // so the movie with the highest rating is first
+                // then we can grab the first item from the sorted array
+                // and that will be the one with the highest rating
+                var sortedMovies = data.sort(function(a, b) {
+                    return d3.descending(a.Rating, b.Rating)
+                })
+
+                var highestRated = sortedMovies[0]
+                console.log("HIGHEST RATED:", highestRated.Title, highestRated.Rating)
 
 
 
@@ -100,6 +118,11 @@
 
             })
             .catch(err => console.log(err))
+
+
+
+        //console.log(data)
+        //console.log("SOMEDAY:", dataSomeday)
 
     </script>
 </body>
